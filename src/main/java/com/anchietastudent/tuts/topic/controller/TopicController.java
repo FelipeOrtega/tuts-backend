@@ -1,5 +1,7 @@
-package com.anchietastudent.tuts.course;
+package com.anchietastudent.tuts.topic.controller;
 
+import com.anchietastudent.tuts.topic.service.TopicService;
+import com.anchietastudent.tuts.topic.model.Topic;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -9,29 +11,29 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/course")
-public class CourseController {
+@RequestMapping("/topic")
+public class TopicController  {
 
     @Autowired
-    private CourseService service;
+    private TopicService service;
 
     @GetMapping("")
-    public ResponseEntity<List<Course>> findAll(){
+    public ResponseEntity<List<Topic>> findAll(){
         return ResponseEntity.ok(service.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Course> findOne(@PathVariable UUID id) throws NotFoundException {
+    public ResponseEntity<Topic> findOne(@PathVariable UUID id) throws NotFoundException {
         return ResponseEntity.ok(service.findById(id));
     }
 
     @PostMapping("")
-    public ResponseEntity<Course> save(@RequestBody Course created){
+    public ResponseEntity<Topic> save(@RequestBody Topic created){
         return ResponseEntity.ok(service.save(created));
     }
 
     @PutMapping("")
-    public ResponseEntity<Course> update(@RequestBody Course updated){
+    public ResponseEntity<Topic> update(@RequestBody Topic updated){
         return ResponseEntity.ok(service.save(updated));
     }
 
@@ -45,4 +47,5 @@ public class CourseController {
     public ResponseEntity<Long> count() {
         return ResponseEntity.ok(service.count());
     }
+    
 }

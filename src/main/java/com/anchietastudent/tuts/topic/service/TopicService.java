@@ -1,5 +1,7 @@
-package com.anchietastudent.tuts.topic;
+package com.anchietastudent.tuts.topic.service;
 
+import com.anchietastudent.tuts.topic.model.Topic;
+import com.anchietastudent.tuts.topic.repository.TopicRepository;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

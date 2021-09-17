@@ -1,6 +1,6 @@
-package com.anchietastudent.tuts.topic;
+package com.anchietastudent.tuts.topic.model;
 
-import com.anchietastudent.tuts.course.Course;
+import com.anchietastudent.tuts.course.model.Course;
 
 import javax.persistence.*;
 import java.util.UUID;

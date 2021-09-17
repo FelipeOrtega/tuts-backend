@@ -1,5 +1,7 @@
-package com.anchietastudent.tuts.category;
+package com.anchietastudent.tuts.category.controller;
 
+import com.anchietastudent.tuts.category.model.Category;
+import com.anchietastudent.tuts.category.service.CategoryService;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

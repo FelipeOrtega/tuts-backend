@@ -1,8 +1,8 @@
-package com.anchietastudent.tuts.course;
+package com.anchietastudent.tuts.course.model;
 
-import com.anchietastudent.tuts.category.Category;
-import com.anchietastudent.tuts.topic.Topic;
-import com.anchietastudent.tuts.user.User;
+import com.anchietastudent.tuts.category.model.Category;
+import com.anchietastudent.tuts.topic.model.Topic;
+import com.anchietastudent.tuts.user.model.User;
 
 import javax.persistence.*;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.anchietastudent.tuts.user;
+package com.anchietastudent.tuts.user.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
