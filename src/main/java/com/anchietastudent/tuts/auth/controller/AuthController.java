@@ -27,7 +27,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class AuthController {
 
     @Autowired
