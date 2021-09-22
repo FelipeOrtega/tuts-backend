@@ -11,13 +11,16 @@ import java.util.UUID;
 @Entity
 public class Course {
 
+    public Course() {
+    }
+
     @Id
     @GeneratedValue
     private UUID id;
 
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "teacher_id")
     private User teacher;
 
@@ -66,5 +69,37 @@ public class Course {
 
     public List<User> getCourseStudents() {
         return courseStudents;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setTeacher(User teacher) {
+        this.teacher = teacher;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public void setCourseStudents(List<User> courseStudents) {
+        this.courseStudents = courseStudents;
+    }
+
+    public void setTopics(List<Topic> topics) {
+        this.topics = topics;
     }
 }
