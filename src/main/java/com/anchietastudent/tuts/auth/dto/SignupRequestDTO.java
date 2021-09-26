@@ -1,16 +1,24 @@
 package com.anchietastudent.tuts.auth.dto;
 
+import java.util.Date;
 import java.util.Set;
 
 public class SignupRequestDTO {
+
+    public SignupRequestDTO() {
+    }
 
     private String name;
 
     private String email;
 
-    private Set<String> role;
+    private String role;
 
     private String password;
+
+    private Date birthDate;
+
+    private String phone;
 
     public String getName() {
         return name;
@@ -36,11 +44,27 @@ public class SignupRequestDTO {
         this.password = password;
     }
 
-    public Set<String> getRole() {
+    public String getRole() {
         return this.role;
     }
 
-    public void setRole(Set<String> role) {
+    public void setRole(String role) {
         this.role = role;
+    }
+
+    public Date getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(Date birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }

@@ -11,9 +11,12 @@ public class User {
 
     public User() { }
 
-    public User(String email, String password) {
+    public User(String name, String email, Date birthDate, String password, String phone) {
+        this.name = name;
         this.email = email;
+        this.birthDate = birthDate;
         this.password = password;
+        this.phone = phone;
     }
 
     @Id
@@ -27,7 +30,7 @@ public class User {
     private String email;
 
     @Column(name = "birth_date")
-    private Date birth_date;
+    private Date birthDate;
 
     @Column(name = "password")
     private String password;
@@ -73,12 +76,12 @@ public class User {
         this.email = email;
     }
 
-    public Date getBirth_date() {
-        return birth_date;
+    public Date getBirthDate() {
+        return birthDate;
     }
 
-    public void setBirth_date(Date birth_date) {
-        this.birth_date = birth_date;
+    public void setBirthDate(Date birthDate) {
+        this.birthDate = birthDate;
     }
 
     public String getPassword() {

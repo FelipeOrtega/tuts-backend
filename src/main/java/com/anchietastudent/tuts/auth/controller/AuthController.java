@@ -17,14 +17,14 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -40,10 +40,10 @@ public class AuthController {
     RoleRepository roleRepository;
 
     @Autowired
-    PasswordEncoder encoder;
+    JwtTokenUtils jwtUtils;
 
     @Autowired
-    JwtTokenUtils jwtUtils;
+    PasswordEncoder encoder;
 
     @PostMapping("/auth/signin")
     public ResponseEntity<?> authenticateUser(@RequestBody SigninRequestDTO loginRequest) {
@@ -68,47 +68,51 @@ public class AuthController {
     }
 
     @PostMapping("/auth/signup")
-    public ResponseEntity<?> registerUser(@RequestBody SignupRequestDTO signUpRequest) {
-        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+    public ResponseEntity<?> registerUser(@RequestBody SignupRequestDTO dto) {
+        if(!validateFields(dto)) return ResponseEntity.badRequest().body(new MessageResponseDTO("Preencha todos os campos!"));
+
+        if (userRepository.existsByEmail(dto.getEmail())) {
             return ResponseEntity
                     .badRequest()
-                    .body(new MessageResponseDTO("Error: Username is already taken!"));
+                    .body(new MessageResponseDTO("Email já está em uso!"));
         }
 
-        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponseDTO("Error: Email is already in use!"));
-        }
-
-        User user = new User(signUpRequest.getEmail(), encoder.encode(signUpRequest.getPassword()));
-        Set<String> strRoles = signUpRequest.getRole();
+        User user = new User( dto.getName(), dto.getEmail(), dto.getBirthDate(), encoder.encode(dto.getPassword()), dto.getPhone());
+        String strRoles = dto.getRole();
         Set<Role> roles = new HashSet<>();
 
-        if (Objects.isNull(strRoles)) {
+        if (StringUtils.isEmpty(strRoles)) {
             Role userRole = roleRepository.findByName(RoleName.STUDENT)
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                    .orElseThrow(() -> new RuntimeException("Função de usuário não encontrada"));
             roles.add(userRole);
         } else {
-            strRoles.forEach(role -> {
-                switch (role) {
-                    case "student":
-                        Role adminRole = roleRepository.findByName(RoleName.STUDENT)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(adminRole);
-                        break;
-                    case "teacher":
-                        Role modRole = roleRepository.findByName(RoleName.TEACHER)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(modRole);
-                        break;
+            switch (strRoles) {
+                case "Aluno":
+                     Role adminRole = roleRepository.findByName(RoleName.STUDENT)
+                            .orElseThrow(() -> new RuntimeException("Função de usuário não encontrada"));
+                     roles.add(adminRole);
+                     break;
+                case "Professor":
+                     Role modRole = roleRepository.findByName(RoleName.TEACHER)
+                             .orElseThrow(() -> new RuntimeException("Função de usuário não encontrada"));
+                     roles.add(modRole);
+                     break;
                 }
-            });
         }
 
         user.setRoles(roles);
         userRepository.save(user);
 
-        return ResponseEntity.ok(new MessageResponseDTO("User registered successfully!"));
+        return ResponseEntity.ok(new MessageResponseDTO("Usuário cadastrado com sucesso!"));
+    }
+
+    private Boolean validateFields(SignupRequestDTO signupRequestDTO) {
+        if(Stream.of(signupRequestDTO.getEmail(),
+                signupRequestDTO.getPassword(),
+                signupRequestDTO.getBirthDate(),
+                signupRequestDTO.getName()).allMatch(StringUtils::isEmpty)) {
+            return false;
+        }
+        return true;
     }
 }
