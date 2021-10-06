@@ -1,6 +1,7 @@
 package com.anchietastudent.tuts.course.controller;
 
 import com.anchietastudent.tuts.course.dto.CourseDTO;
+import com.anchietastudent.tuts.course.dto.CourseFilterDTO;
 import com.anchietastudent.tuts.course.model.Course;
 import com.anchietastudent.tuts.course.service.CourseService;
 import javassist.NotFoundException;
@@ -31,6 +32,11 @@ public class CourseController {
     @GetMapping("/course/{id}")
     public ResponseEntity<Course> findOne(@PathVariable UUID id) throws NotFoundException {
         return ResponseEntity.ok(service.findById(id));
+    }
+
+    @GetMapping("/course/filter")
+    public ResponseEntity<List<CourseDTO>> findByFilter(CourseFilterDTO courseFilterDTO) throws NotFoundException{
+        return ResponseEntity.ok(service.findByFilter(courseFilterDTO));
     }
 
     @PostMapping("/course")

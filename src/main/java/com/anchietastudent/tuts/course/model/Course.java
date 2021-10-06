@@ -38,7 +38,7 @@ public class Course {
             joinColumns = { @JoinColumn(name = "course_id") },
             inverseJoinColumns = { @JoinColumn(name = "student_id") }
     )
-    private List<User> courseStudents;
+    private List<User> students;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Topic> topics;
@@ -67,8 +67,8 @@ public class Course {
         return category;
     }
 
-    public List<User> getCourseStudents() {
-        return courseStudents;
+    public List<User> getStudents() {
+        return students;
     }
 
     public void setId(UUID id) {
@@ -95,8 +95,8 @@ public class Course {
         this.category = category;
     }
 
-    public void setCourseStudents(List<User> courseStudents) {
-        this.courseStudents = courseStudents;
+    public void setStudents(List<User> students) {
+        this.students = students;
     }
 
     public void setTopics(List<Topic> topics) {
