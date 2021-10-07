@@ -4,6 +4,7 @@ import com.anchietastudent.tuts.course.dto.CourseDTO;
 import com.anchietastudent.tuts.course.dto.CourseFilterDTO;
 import com.anchietastudent.tuts.course.model.Course;
 import com.anchietastudent.tuts.course.service.CourseService;
+import com.anchietastudent.tuts.util.dto.MessageResponseDTO;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -59,4 +60,10 @@ public class CourseController {
     public ResponseEntity<Long> count() {
         return ResponseEntity.ok(service.count());
     }
+
+    @PutMapping("/course/{id}/enroll/{userId}")
+    public ResponseEntity<MessageResponseDTO> enrollStudent(@PathVariable("id") UUID courseId, @PathVariable("userId") UUID userId) throws NotFoundException {
+        return ResponseEntity.ok(service.enrollStudent(courseId, userId));
+    }
+
 }

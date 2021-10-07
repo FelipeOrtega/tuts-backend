@@ -9,6 +9,7 @@ import com.anchietastudent.tuts.course.repository.CourseRepository;
 import com.anchietastudent.tuts.user.model.User;
 import com.anchietastudent.tuts.user.model.enumeration.RoleName;
 import com.anchietastudent.tuts.user.service.UserService;
+import com.anchietastudent.tuts.util.dto.MessageResponseDTO;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -73,5 +74,15 @@ public class CourseService {
         List<CourseDTO> dto = courses.stream().map(c -> CourseDTO.buildDTO(c, c.getTeacher()))
                 .collect(Collectors.toList());
         return dto;
+    }
+
+    public MessageResponseDTO enrollStudent(UUID courseId, UUID userId) throws NotFoundException {
+        Course course = findById(courseId);
+        User user = userService.findOne(userId);
+        List<User> students = course.getStudents();
+        students.add(user);
+        course.setStudents(students);
+        repository.save(course);
+        return new MessageResponseDTO("Matriculado com sucesso!");
     }
 }
