@@ -43,7 +43,7 @@ public class CourseService {
     }
 
     public Course findById(UUID id) throws NotFoundException {
-        return repository.findById(id).orElseThrow(() -> new NotFoundException("object not found"));
+        return repository.findById(id).orElseThrow(() -> new NotFoundException("Curso não encontrado"));
     }
 
     public void delete(Course Course) {
@@ -80,9 +80,13 @@ public class CourseService {
         Course course = findById(courseId);
         User user = userService.findOne(userId);
         List<User> students = course.getStudents();
-        students.add(user);
-        course.setStudents(students);
-        repository.save(course);
-        return new MessageResponseDTO("Matriculado com sucesso!");
+        Boolean isStudentAlreadyEnrolled = students.stream().map(User::getId).anyMatch(id -> userId.equals(id));
+        if(!isStudentAlreadyEnrolled) {
+            students.add(user);
+            course.setStudents(students);
+            repository.save(course);
+            return new MessageResponseDTO("Matriculado com sucesso!");
+        }
+        return new MessageResponseDTO("Usuário já matriculado!");
     }
 }
