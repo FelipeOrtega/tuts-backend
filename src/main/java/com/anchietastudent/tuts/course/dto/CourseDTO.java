@@ -17,6 +17,8 @@ public class CourseDTO {
 
     private String description;
 
+    private String teacherId;
+
     public String getName() {
         return name;
     }
@@ -49,12 +51,21 @@ public class CourseDTO {
         this.courseId = courseId;
     }
 
+    public String getTeacherId() {
+        return teacherId;
+    }
+
+    public void setTeacherId(String teacherId) {
+        this.teacherId = teacherId;
+    }
+
     public static CourseDTO buildDTO(Course course, User teacher) {
         CourseDTO courseDTO = new CourseDTO();
         courseDTO.setCourseId(course.getId());
         courseDTO.setName(course.getName());
         courseDTO.setDescription(course.getDescription());
         courseDTO.setTeacherName(teacher.getName());
+        courseDTO.setTeacherId(teacher.getId().toString());
         return courseDTO;
     }
 }
