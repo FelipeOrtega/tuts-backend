@@ -1,5 +1,6 @@
 package com.anchietastudent.tuts.course.controller;
 
+import com.anchietastudent.tuts.course.dto.CourseCreateDTO;
 import com.anchietastudent.tuts.course.dto.CourseDTO;
 import com.anchietastudent.tuts.course.dto.CourseFilterDTO;
 import com.anchietastudent.tuts.course.model.Course;
@@ -41,7 +42,7 @@ public class CourseController {
     }
 
     @PostMapping("/course")
-    public ResponseEntity<Course> save(@RequestBody Course created){
+    public ResponseEntity<MessageResponseDTO> save(@RequestBody CourseCreateDTO created) throws NotFoundException {
         return ResponseEntity.ok(service.save(created));
     }
 

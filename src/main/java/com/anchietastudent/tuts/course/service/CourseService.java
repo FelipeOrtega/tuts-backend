@@ -2,10 +2,13 @@ package com.anchietastudent.tuts.course.service;
 
 import com.anchietastudent.tuts.category.model.Category;
 import com.anchietastudent.tuts.category.service.CategoryService;
+import com.anchietastudent.tuts.course.dto.CourseCreateDTO;
 import com.anchietastudent.tuts.course.dto.CourseDTO;
 import com.anchietastudent.tuts.course.dto.CourseFilterDTO;
 import com.anchietastudent.tuts.course.model.Course;
 import com.anchietastudent.tuts.course.repository.CourseRepository;
+import com.anchietastudent.tuts.topic.TopicDTO;
+import com.anchietastudent.tuts.topic.model.Topic;
 import com.anchietastudent.tuts.user.model.User;
 import com.anchietastudent.tuts.user.model.enumeration.RoleName;
 import com.anchietastudent.tuts.user.service.UserService;
@@ -40,6 +43,17 @@ public class CourseService {
 
     public Course save(Course Course) {
         return repository.save(Course);
+    }
+
+    public MessageResponseDTO save(CourseCreateDTO dto) throws NotFoundException {
+        Category category = categoryService.findById(dto.getCategoryId());
+        User teacher = userService.findOne(dto.getTeacherId());
+        List<Topic> topics = dto.getTopics().stream().map(topic -> TopicDTO.toTopicEntity(topic))
+                .collect(Collectors.toList());
+        Course course = CourseCreateDTO.toCourseEntity(dto, category, teacher, topics);
+        topics.forEach(topic -> topic.setCourse(course));
+        repository.save(course);
+        return new MessageResponseDTO("Curso criado com sucesso!");
     }
 
     public Course findById(UUID id) throws NotFoundException {
