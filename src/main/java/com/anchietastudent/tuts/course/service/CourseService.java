@@ -16,9 +16,11 @@ import com.anchietastudent.tuts.util.dto.MessageResponseDTO;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -48,10 +50,16 @@ public class CourseService {
     public MessageResponseDTO save(CourseCreateDTO dto) throws NotFoundException {
         Category category = categoryService.findById(dto.getCategoryId());
         User teacher = userService.findOne(dto.getTeacherId());
-        List<Topic> topics = dto.getTopics().stream().map(topic -> TopicDTO.toTopicEntity(topic))
-                .collect(Collectors.toList());
-        Course course = CourseCreateDTO.toCourseEntity(dto, category, teacher, topics);
-        topics.forEach(topic -> topic.setCourse(course));
+        Course course = null;
+        if(Objects.nonNull(dto.getTopics()) && !CollectionUtils.isEmpty(dto.getTopics())) {
+            List<Topic> topics = dto.getTopics().stream().map(topic -> TopicDTO.toTopicEntity(topic))
+                    .collect(Collectors.toList());
+            course = CourseCreateDTO.toCourseEntity(dto, category, teacher, topics);
+            Course finalCourse = course;
+            topics.forEach(topic -> topic.setCourse(finalCourse));
+        } else {
+            course = CourseCreateDTO.toCourseEntity(dto, category, teacher, null);
+        }
         repository.save(course);
         return new MessageResponseDTO("Curso criado com sucesso!");
     }
