@@ -1,15 +1,13 @@
 package com.anchietastudent.tuts.user.controller;
 
-import com.anchietastudent.tuts.category.service.CategoryService;
 import com.anchietastudent.tuts.user.dto.UserProfileDTO;
+import com.anchietastudent.tuts.user.model.User;
 import com.anchietastudent.tuts.user.service.UserService;
+import com.anchietastudent.tuts.util.dto.MessageResponseDTO;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
@@ -23,5 +21,10 @@ public class UserController {
     @GetMapping("{id}/profile")
     public ResponseEntity<UserProfileDTO> findUserData(@PathVariable UUID id) throws NotFoundException {
         return ResponseEntity.ok(userService.findUserData(id));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<MessageResponseDTO> update(@RequestBody User updated, @PathVariable UUID id) throws NotFoundException {
+        return ResponseEntity.ok(userService.update(updated, id));
     }
 }
