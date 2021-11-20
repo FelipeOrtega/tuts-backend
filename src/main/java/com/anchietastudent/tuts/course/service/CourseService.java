@@ -14,10 +14,16 @@ import com.anchietastudent.tuts.user.model.enumeration.RoleName;
 import com.anchietastudent.tuts.user.service.UserService;
 import com.anchietastudent.tuts.util.dto.MessageResponseDTO;
 import javassist.NotFoundException;
+import javassist.tools.web.BadHttpRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -110,5 +116,26 @@ public class CourseService {
             return new MessageResponseDTO("Matriculado com sucesso!");
         }
         return new MessageResponseDTO("Usuário já matriculado!");
+    }
+
+    public MessageResponseDTO uploadImage(MultipartFile file, UUID courseId) throws BadHttpRequest, NotFoundException {
+        try {
+            Course course = findById(courseId);
+            course.setImage(file.getBytes());
+            course.setImageContentType(file.getContentType());
+            course.setImageFileName(file.getOriginalFilename());
+            repository.save(course);
+            return new MessageResponseDTO("Imagem salva com sucesso!");
+        } catch (IOException ex) {
+            throw new BadHttpRequest();
+        }
+    }
+
+    public ResponseEntity<byte[]> downloadImage(UUID courseId) throws NotFoundException {
+        Course course = findById(courseId);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + course.getImageFileName() + "\"")
+                .contentType(MediaType.valueOf(course.getImageContentType()))
+                .body(course.getImage());
     }
 }

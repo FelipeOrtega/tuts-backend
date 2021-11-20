@@ -7,9 +7,11 @@ import com.anchietastudent.tuts.course.model.Course;
 import com.anchietastudent.tuts.course.service.CourseService;
 import com.anchietastudent.tuts.util.dto.MessageResponseDTO;
 import javassist.NotFoundException;
+import javassist.tools.web.BadHttpRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.UUID;
@@ -63,8 +65,18 @@ public class CourseController {
     }
 
     @PutMapping("/course/{id}/enroll/{userId}")
-    public ResponseEntity<MessageResponseDTO> enrollStudent(@PathVariable("id") UUID courseId, @PathVariable("userId") UUID userId) throws NotFoundException {
+    public ResponseEntity<MessageResponseDTO> enrollStudent(@PathVariable("id") UUID courseId, @PathVariable("id") UUID userId) throws NotFoundException {
         return ResponseEntity.ok(service.enrollStudent(courseId, userId));
     }
 
+    @PostMapping(value = "/course/{id}/image/upload")
+    public ResponseEntity<MessageResponseDTO> uploadImage(@RequestParam("imageFile") MultipartFile file,
+                                                          @PathVariable("id") UUID courseId) throws BadHttpRequest, NotFoundException {
+        return ResponseEntity.ok(service.uploadImage(file, courseId));
+    }
+
+    @GetMapping(value = "/course/{id}/image/download")
+    public ResponseEntity<byte[]> downloadImage(@PathVariable("id") UUID courseId) throws NotFoundException {
+        return service.downloadImage(courseId);
+    }
 }

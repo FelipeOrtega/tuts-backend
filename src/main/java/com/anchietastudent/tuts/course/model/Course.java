@@ -28,6 +28,10 @@ public class Course {
 
     private byte[] image;
 
+    private String imageFileName;
+
+    private String imageContentType;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
@@ -101,5 +105,21 @@ public class Course {
 
     public void setTopics(List<Topic> topics) {
         this.topics = topics;
+    }
+
+    public String getImageFileName() {
+        return imageFileName;
+    }
+
+    public void setImageFileName(String imageFileName) {
+        this.imageFileName = imageFileName;
+    }
+
+    public String getImageContentType() {
+        return imageContentType;
+    }
+
+    public void setImageContentType(String imageContentType) {
+        this.imageContentType = imageContentType;
     }
 }
