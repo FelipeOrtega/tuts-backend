@@ -38,9 +38,9 @@ public class UserService {
 
     public MessageResponseDTO update(User user, UUID id) throws NotFoundException {
         User toUpdate = findOne(id);
-        toUpdate.setName(user.getName());
-        toUpdate.setPassword(encoder.encode(user.getPassword()));
-        toUpdate.setPhone(user.getPhone());
+        Optional.ofNullable(user.getName()).ifPresent(n -> toUpdate.setName(n));
+        Optional.ofNullable(user.getPassword()).ifPresent(p -> toUpdate.setPassword(encoder.encode(p)));
+        Optional.ofNullable(user.getPhone()).ifPresent(p -> toUpdate.setPhone(p));
         repository.save(toUpdate);
         return new MessageResponseDTO("Atualizado com Sucesso!");
     }
