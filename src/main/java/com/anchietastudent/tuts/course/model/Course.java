@@ -122,4 +122,8 @@ public class Course {
     public void setImageContentType(String imageContentType) {
         this.imageContentType = imageContentType;
     }
+
+    public List<Topic> getTopics() {
+        return topics;
+    }
 }

@@ -2,6 +2,9 @@ package com.anchietastudent.tuts.topic;
 
 import com.anchietastudent.tuts.topic.model.Topic;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class TopicDTO {
 
     public TopicDTO() {
@@ -43,5 +46,17 @@ public class TopicDTO {
         topic.setLink(dto.getLink());
         topic.setTitle(dto.getTitle());
         return topic;
+    }
+
+    public static List<TopicDTO> toDTOs(List<Topic> topics) {
+        return topics.stream().map(TopicDTO::toDTO).collect(Collectors.toList());
+    }
+
+    public static TopicDTO toDTO(Topic topic) {
+        TopicDTO dto = new TopicDTO();
+        dto.setContent(topic.getContent());
+        dto.setLink(topic.getLink());
+        dto.setTitle(topic.getTitle());
+        return dto;
     }
 }

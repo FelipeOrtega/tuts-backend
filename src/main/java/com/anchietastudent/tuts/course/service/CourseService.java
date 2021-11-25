@@ -5,6 +5,7 @@ import com.anchietastudent.tuts.category.service.CategoryService;
 import com.anchietastudent.tuts.course.dto.CourseCreateDTO;
 import com.anchietastudent.tuts.course.dto.CourseDTO;
 import com.anchietastudent.tuts.course.dto.CourseFilterDTO;
+import com.anchietastudent.tuts.course.dto.CourseGridDTO;
 import com.anchietastudent.tuts.course.model.Course;
 import com.anchietastudent.tuts.course.repository.CourseRepository;
 import com.anchietastudent.tuts.topic.TopicDTO;
@@ -72,6 +73,11 @@ public class CourseService {
 
     public Course findById(UUID id) throws NotFoundException {
         return repository.findById(id).orElseThrow(() -> new NotFoundException("Curso não encontrado"));
+    }
+
+    public CourseGridDTO findCourse(UUID id) throws NotFoundException {
+        Course course = findById(id);
+        return CourseGridDTO.toDTO(course);
     }
 
     public void delete(Course Course) {
