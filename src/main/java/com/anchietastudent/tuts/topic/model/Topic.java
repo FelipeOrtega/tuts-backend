@@ -24,6 +24,8 @@ public class Topic {
 
     private String link;
 
+    private Integer index;
+
     public UUID getId() {
         return id;
     }
@@ -62,5 +64,13 @@ public class Topic {
 
     public void setLink(String link) {
         this.link = link;
+    }
+
+    public Integer getIndex() {
+        return index;
+    }
+
+    public void setIndex(Integer index) {
+        this.index = index;
     }
 }

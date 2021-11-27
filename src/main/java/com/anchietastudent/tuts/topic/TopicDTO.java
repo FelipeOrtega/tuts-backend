@@ -16,6 +16,8 @@ public class TopicDTO {
 
     private String link;
 
+    private int index;
+
     public String getTitle() {
         return title;
     }
@@ -40,11 +42,20 @@ public class TopicDTO {
         this.link = link;
     }
 
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
     public static Topic toTopicEntity(TopicDTO dto) {
         Topic topic = new Topic();
         topic.setContent(dto.getContent());
         topic.setLink(dto.getLink());
         topic.setTitle(dto.getTitle());
+        topic.setIndex(dto.getIndex());
         return topic;
     }
 
@@ -57,6 +68,7 @@ public class TopicDTO {
         dto.setContent(topic.getContent());
         dto.setLink(topic.getLink());
         dto.setTitle(topic.getTitle());
+        dto.setIndex(topic.getIndex());
         return dto;
     }
 }
