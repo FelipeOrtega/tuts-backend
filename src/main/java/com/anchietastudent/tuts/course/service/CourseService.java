@@ -81,13 +81,13 @@ public class CourseService {
                 Set<Topic> newTopics = dto.getTopics().stream().map(topic -> TopicDTO.toTopicEntity(topic))
                         .collect(Collectors.toSet());
                 Optional.ofNullable(course.getTopics()).ifPresent(t -> topicRepository.deleteAllInBatch(t));
+                UUID id = course.getId();
                 course = CourseCreateDTO.toCourseEntity(dto, category, teacher, newTopics);
                 Course finalCourse = course;
+                finalCourse.setId(id);
                 newTopics.forEach(topic -> topic.setCourse(finalCourse));
-            } else {
-                course = CourseCreateDTO.toCourseEntity(dto, category, teacher, null);
+                repository.save(finalCourse);
             }
-            repository.save(course);
         }
         return new MessageResponseDTO("Curso atualizado com sucesso!");
     }
