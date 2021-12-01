@@ -18,7 +18,7 @@ public class Topic {
 
     private String content;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "course_id")
     private Course course;
 
@@ -30,7 +30,7 @@ public class Topic {
         return id;
     }
 
-    private void setId(UUID id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -73,4 +73,6 @@ public class Topic {
     public void setIndex(Integer index) {
         this.index = index;
     }
+
+
 }

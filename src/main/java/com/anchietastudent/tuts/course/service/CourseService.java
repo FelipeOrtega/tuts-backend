@@ -10,6 +10,7 @@ import com.anchietastudent.tuts.course.model.Course;
 import com.anchietastudent.tuts.course.repository.CourseRepository;
 import com.anchietastudent.tuts.topic.TopicDTO;
 import com.anchietastudent.tuts.topic.model.Topic;
+import com.anchietastudent.tuts.topic.repository.TopicRepository;
 import com.anchietastudent.tuts.user.model.User;
 import com.anchietastudent.tuts.user.model.enumeration.RoleName;
 import com.anchietastudent.tuts.user.service.UserService;
@@ -25,10 +26,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -42,6 +40,9 @@ public class CourseService {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private TopicRepository topicRepository;
 
     public List<CourseDTO> findAll() {
         List<Course> courses = repository.findAll();
@@ -59,8 +60,8 @@ public class CourseService {
         User teacher = userService.findOne(dto.getTeacherId());
         Course course = null;
         if(Objects.nonNull(dto.getTopics()) && !CollectionUtils.isEmpty(dto.getTopics())) {
-            List<Topic> topics = dto.getTopics().stream().map(topic -> TopicDTO.toTopicEntity(topic))
-                    .collect(Collectors.toList());
+            Set<Topic> topics = dto.getTopics().stream().map(topic -> TopicDTO.toTopicEntity(topic))
+                    .collect(Collectors.toSet());
             course = CourseCreateDTO.toCourseEntity(dto, category, teacher, topics);
             Course finalCourse = course;
             topics.forEach(topic -> topic.setCourse(finalCourse));
@@ -69,6 +70,26 @@ public class CourseService {
         }
         repository.save(course);
         return new MessageResponseDTO("Curso criado com sucesso!");
+    }
+
+    public MessageResponseDTO update(CourseCreateDTO dto) throws NotFoundException {
+        Category category = categoryService.findById(dto.getCategoryId());
+        User teacher = userService.findOne(dto.getTeacherId());
+        Course course = findById(dto.getId());
+        if(Objects.nonNull(course)) {
+            if(!CollectionUtils.isEmpty(dto.getTopics())) {
+                Set<Topic> newTopics = dto.getTopics().stream().map(topic -> TopicDTO.toTopicEntity(topic))
+                        .collect(Collectors.toSet());
+                Optional.ofNullable(course.getTopics()).ifPresent(t -> topicRepository.deleteAllInBatch(t));
+                course = CourseCreateDTO.toCourseEntity(dto, category, teacher, newTopics);
+                Course finalCourse = course;
+                newTopics.forEach(topic -> topic.setCourse(finalCourse));
+            } else {
+                course = CourseCreateDTO.toCourseEntity(dto, category, teacher, null);
+            }
+            repository.save(course);
+        }
+        return new MessageResponseDTO("Curso atualizado com sucesso!");
     }
 
     public Course findById(UUID id) throws NotFoundException {

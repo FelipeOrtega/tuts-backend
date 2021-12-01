@@ -7,12 +7,14 @@ import com.anchietastudent.tuts.topic.model.Topic;
 import com.anchietastudent.tuts.user.model.User;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 public class CourseCreateDTO {
 
     public CourseCreateDTO() { }
 
+    private UUID id;
     private String name;
     private String description;
     private UUID categoryId;
@@ -59,7 +61,15 @@ public class CourseCreateDTO {
         this.teacherId = teacherId;
     }
 
-    public static Course toCourseEntity(CourseCreateDTO dto, Category category, User teacher, List<Topic> topics) {
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public static Course toCourseEntity(CourseCreateDTO dto, Category category, User teacher, Set<Topic> topics) {
         Course course = new Course();
         course.setCategory(category);
         course.setDescription(dto.getDescription());

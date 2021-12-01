@@ -6,6 +6,7 @@ import com.anchietastudent.tuts.user.model.User;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -45,7 +46,7 @@ public class Course {
     private List<User> students;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Topic> topics;
+    private Set<Topic> topics;
 
     public UUID getId() {
         return id;
@@ -103,7 +104,7 @@ public class Course {
         this.students = students;
     }
 
-    public void setTopics(List<Topic> topics) {
+    public void setTopics(Set<Topic> topics) {
         this.topics = topics;
     }
 
@@ -123,7 +124,7 @@ public class Course {
         this.imageContentType = imageContentType;
     }
 
-    public List<Topic> getTopics() {
+    public Set<Topic> getTopics() {
         return topics;
     }
 }

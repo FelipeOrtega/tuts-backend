@@ -50,8 +50,8 @@ public class CourseController {
     }
 
     @PutMapping("/course")
-    public ResponseEntity<Course> update(@RequestBody Course updated){
-        return ResponseEntity.ok(service.save(updated));
+    public ResponseEntity<MessageResponseDTO> update(@RequestBody CourseCreateDTO updated) throws NotFoundException {
+        return ResponseEntity.ok(service.update(updated));
     }
 
     @DeleteMapping("/course/{id}")
@@ -66,7 +66,7 @@ public class CourseController {
     }
 
     @PutMapping("/course/{id}/enroll/{userId}")
-    public ResponseEntity<MessageResponseDTO> enrollStudent(@PathVariable("id") UUID courseId, @PathVariable("id") UUID userId) throws NotFoundException {
+    public ResponseEntity<MessageResponseDTO> enrollStudent(@PathVariable("id") UUID courseId, @PathVariable("userId") UUID userId) throws NotFoundException {
         return ResponseEntity.ok(service.enrollStudent(courseId, userId));
     }
 
